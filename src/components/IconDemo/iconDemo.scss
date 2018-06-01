@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.cell {
+    display: inline-block;
+    width: 200px;
+    padding: 10px;
+    // color: $color-white;
+    font-size: $font-size-subhead;
+}
+.cell span {
+  margin-left: 10px;
+  cursor: pointer;
+  display: inline-block;
+}
