@@ -3,10 +3,18 @@
  */
 import { HashRouter as Router } from 'react-router-dom';
 import { Switch, Route, hashHistory } from 'react-router';
+// import { withRouter } from 'react-router-dom';
 import React from 'react';
 import * as Tools from 'utils/tools';
-
 import routerConfig from './routerConfig';
+
+function checkToken(routes){
+  let token = Tools.getUserToken();
+  if(token == null){
+    this.props.match.push('/login')
+  }
+  return [...routes];
+}
 
 /**
  * 将路由信息扁平化，继承上一级路由的 path
@@ -115,9 +123,9 @@ function renderRouterConfigV4(container, router, contextPath) {
 
   return <Switch>{routeChildren}</Switch>;
 }
-
-const routerWithReactRouter4 = recursiveRouterConfigV4(routerConfig);
+const routerConfig_ = checkToken(routerConfig)
+const routerWithReactRouter4 = recursiveRouterConfigV4(routerConfig_);
 const routeChildren = renderRouterConfigV4(null, routerWithReactRouter4, '/');
 
-
+// @withRouter
 export default <Router>{routeChildren}</Router>;

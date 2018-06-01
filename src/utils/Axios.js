@@ -3,7 +3,7 @@ import * as Tools from './tools';
 import { Feedback } from "@icedesign/base";
 import jsonwebtoken from "jsonwebtoken";
 import Qs from 'qs';
-// import { hashHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 
 /**
  * 请求超时, 单位毫秒, 默认8秒
@@ -14,13 +14,6 @@ const JSON = "application/json; charset=UTF-8";
 const FORM = "application/x-www-form-urlencoded; charset=UTF-8";
 const Toast = Feedback.toast;
 
-const checkToken = () => {
-  let token = Tools.getUserToken();
-  if(token == null){
-    // hashHistory.push('/login');
-    this.props.history.push('/login')
-  }
-}
 // 创建axios实例
 const Axios = axios.create({
     baseURL: process.env.BASE_API, // api的base_url
@@ -98,7 +91,7 @@ const Axios = axios.create({
   
   },error => {
       const status = error.response.status;
-      Toast.error("请求失败");
+      // Toast.error("请求失败");
       // if(403 == status){
       //   hashHistory.push("/error");
       // }else if(404 == status){
