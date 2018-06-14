@@ -22,9 +22,16 @@ import TabTable from './pages/TabTable';
 import HeaderAsideFooterLayout from './layouts/HeaderAsideFooterLayout';
 
 import Notpermission from './pages/Notpermission';
+import FilterTable from './pages/FilterTable';
+
 import AddDataDictionary from './pages/DataDictionary/components/SimpleFluencyForm';
 
 const routerConfig = [
+  {
+    path: '/',
+    layout: HeaderAsideFooterResponsiveLayout,
+    component: Dashboard,
+  },
   {
     path: '/dictionary',
     layout: HeaderAsideFooterResponsiveLayout,
@@ -41,11 +48,6 @@ const routerConfig = [
         component: AddDataDictionary,
       },
     ],
-  },
-  {
-    path: '/',
-    layout: HeaderAsideFooterResponsiveLayout,
-    component: Dashboard,
   },
   {
     path: '/tableSearch',
@@ -80,14 +82,14 @@ const routerConfig = [
     component: IconDemo,
   },
   {
-    path: '/empty',
-    layout: HeaderFooterLayout,
-    component: Empty,
-  },
-  {
     path: '/error',
     layout: HeaderFooterLayout,
     component: Error,
+  },
+  {
+    path: '/empty',
+    layout: HeaderFooterLayout,
+    component: Empty,
   },
   {
     path: '/tabTable',
@@ -98,6 +100,11 @@ const routerConfig = [
     path: '/Notpermission',
     layout: HeaderAsideFooterResponsiveLayout,
     component: Notpermission,
+  },
+  {
+    path: '/FilterTable',
+    layout: HeaderAsideFooterResponsiveLayout,
+    component: FilterTable,
   },
   {
     path: '*',

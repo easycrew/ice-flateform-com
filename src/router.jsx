@@ -1,19 +1,20 @@
 /**
  * 定义应用路
  */
-import { HashRouter as Router } from 'react-router-dom';
+import { HashRouter as Router,Redirect } from 'react-router-dom';
 import { Switch, Route, hashHistory } from 'react-router';
 // import { withRouter } from 'react-router-dom';
 import React from 'react';
 import * as Tools from 'utils/tools';
 import routerConfig from './routerConfig';
+import Login from './pages/Login';
 
-function checkToken(routes){
+const  checkToken = (props) => {
   let token = Tools.getUserToken();
   if(token == null){
-    this.props.match.push('/login')
+    return false
   }
-  return [...routes];
+  return true
 }
 
 /**
@@ -67,47 +68,97 @@ function renderRouterConfigV4(container, router, contextPath) {
 
     // 优先使用当前定义的 layout
     if (routeItem.layout && routeItem.component) {
-      routeChildren.push(
-        <Route
-          key={routePath}
-          exact
-          path={routePath}
-          render={(props) => {
-            return React.createElement(
-              routeItem.layout,
-              props,
-              React.createElement(routeItem.component, props)
-            );
-          }}
-        />
-      );
+      if(routePath == '/login'){
+        routeChildren.push(
+          <Route
+            key={routePath}
+            exact
+            path={routePath}
+            render={(props) => {
+              return React.createElement(
+                routeItem.layout,
+                props,
+                React.createElement(routeItem.component, props)
+              )
+            }}
+          />
+        )
+      }else{
+        routeChildren.push(
+          <Route
+            key={routePath}
+            exact
+            path={routePath}
+            render={(props) => {
+              return checkToken()?(
+                React.createElement(
+                  routeItem.layout,
+                  props,
+                  React.createElement(routeItem.component, props)
+                )
+              ):(
+                <Redirect to='/login' />
+              )
+            }}
+          />
+        )
+      }
     } else if (routeContainer && routeItem.component) {
       // 使用上层节点作为 container
-      routeChildren.push(
-        <Route
-          key={routePath}
-          exact
-          path={routePath}
-          render={(props) => {
-            return React.createElement(
-              routeContainer,
-              props,
-              React.createElement(routeItem.component, props)
-            );
-          }}
-        />
-      );
+      if(routePath == '/login'){
+        routeChildren.push(
+          <Route
+            key={routePath}
+            exact
+            path={routePath}
+            render={(props) => {
+              return React.createElement(
+                routeContainer,
+                props,
+                React.createElement(routeItem.component, props)
+              )
+            }}
+          />
+        )
+      }else{
+        routeChildren.push(
+          <Route
+            key={routePath}
+            exact
+            path={routePath}
+            render={(props) => {
+              return checkToken()?(
+                React.createElement(
+                  routeContainer,
+                  props,
+                  React.createElement(routeItem.component, props)
+                )
+              ):(
+                <Redirect to='/login' />
+              )
+            }}
+          />
+        )
+      }    
     } else {
-      routeChildren.push(
+        routeChildren.push(
         <Route
           key={routePath}
           exact
           path={routePath}
           component={routeItem.component}
+          render={props =>
+            checkToken() ? (
+              <Component {...props} />
+            ) : (
+              <Redirect
+                to='/login'
+              />
+            )
+          }
         />
-      );
+      )
     }
-
     // 存在子路由，递归当前路径，并添加到路由中
     if (Array.isArray(routeItem.childRoutes)) {
       routeItem.childRoutes.forEach((r) => {
@@ -121,11 +172,12 @@ function renderRouterConfigV4(container, router, contextPath) {
     renderRoute(container, r, contextPath);
   });
 
+  
   return <Switch>{routeChildren}</Switch>;
 }
-const routerConfig_ = checkToken(routerConfig)
-const routerWithReactRouter4 = recursiveRouterConfigV4(routerConfig_);
+// const routerConfig_ = checkToken(routerConfig)
+const routerWithReactRouter4 = recursiveRouterConfigV4(routerConfig);
 const routeChildren = renderRouterConfigV4(null, routerWithReactRouter4, '/');
 
 // @withRouter
-export default <Router>{routeChildren}</Router>;
+export default  <Router>{routeChildren}</Router>;
